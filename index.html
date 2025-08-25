@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banking Server</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #001f3f;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #003366;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 0 15px #000;
+  }
+  input[type=text], input[type=number] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+  }
+  button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .processing {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  .success {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #00ff00;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>BANKING SERVER</h2>
+  <div id="form">
+    <input type="text" id="fullName" placeholder="Enter Full Name"><br>
+    <input type="number" id="refundAmount" placeholder="Enter 1st Refund Amount"><br>
+    <button onclick="processTransaction()">Submit</button>
+  </div>
+  <div id="processing" class="processing" style="display:none;"></div>
+  <div id="success" class="success" style="display:none;"></div>
+</div>
+
+<script>
+function processTransaction() {
+  let name = document.getElementById('fullName').value;
+  let amount = document.getElementById('refundAmount').value;
+
+  if (!name || !amount) {
+    alert("Please enter both fields!");
+    return;
+  }
+
+  // Append two zeros and add dollar sign
+  let processedAmount = "$" + amount + "00";
+
+  // Generate random transaction number
+  let txnID = Math.floor(Math.random() * 900000 + 100000);
+
+  // Hide form and show processing
+  document.getElementById('form').style.display = 'none';
+  let processingDiv = document.getElementById('processing');
+  processingDiv.style.display = 'block';
+  processingDiv.innerText = "Transaction Processing";
+
+  let dots = "";
+  let i = 0;
+  let interval = setInterval(() => {
+    dots += ".";
+    if (dots.length > 3) dots = "";
+    processingDiv.innerText = "Transaction Processing" + dots;
+    i++;
+    if (i > 12) { // approx 6 seconds
+      clearInterval(interval);
+      processingDiv.style.display = 'none';
+      let successDiv = document.getElementById('success');
+      successDiv.style.display = 'block';
+      successDiv.innerHTML = `
+        Account Holder: ${name}<br>
+        Amount Processed: ${processedAmount}<br>
+        Transaction No.: TXN${txnID}<br>
+        Status: Approved ✅<br><br>
+        Your refund has successfully sent
+      `;
+    }
+  }, 500);
+}
+</script>
+</body>
+</html>
