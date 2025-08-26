@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banking Server</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    background-color: #002147;
+    color: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    width: 450px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .container img.logo {
+    width: 120px;
+    margin-bottom: 20px;
+  }
+  h2 {
+    margin-bottom: 25px;
+    font-size: 26px;
+    letter-spacing: 1px;
+  }
+  input[type=text], input[type=number], textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 15px 0;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+  }
+  textarea {
+    resize: none;
+    height: 60px;
+  }
+  button {
+    padding: 12px 30px;
+    background-color: #ffcc00;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background-color: #e6b800;
+  }
+  .processing, .success {
+    margin-top: 25px;
+    font-size: 18px;
+  }
+  .success {
+    color: #00ff00;
+  }
+  .progress-bar {
+    margin-top: 15px;
+    background-color: #003366;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 20px;
+    width: 100%;
+  }
+  .progress {
+    height: 100%;
+    width: 0%;
+    background-color: #ffcc00;
+    text-align: center;
+    line-height: 20px;
+    color: #000;
+    font-weight: bold;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <img src="logo.png" alt="Bank Logo" class="logo">
+  <h2>BANKING SERVER</h2>
+
+  <div id="form">
+    <input type="text" id="fullName" placeholder="Full Name">
+    <input type="number" id="refundAmount" placeholder="Refund Amount">
+    <textarea id="reason" placeholder="Reason for Refund"></textarea>
+    <button onclick="processTransaction()">Submit</button>
+  </div>
+
+  <div id="processing" class="processing" style="display:none;">
+    Transaction Processing
+    <div class="progress-bar">
+      <div class="progress" id="progressBar">0%</div>
+    </div>
+  </div>
+
+  <div id="success" class="success" style="display:none;"></div>
+</div>
+
+<script>
+function processTransaction() {
+  let name = document.getElementById('fullName').value.trim();
+  let amount = document.getElementById('refundAmount').value.trim();
+  let reason = document.getElementById('reason').value.trim();
+
+  if (!name || !amount || !reason) {
+    alert("Please fill in all fields!");
+    return;
+  }
+
+  // Append two zeros and add dollar sign
+  let processedAmount = "$" + amount + "00";
+
+  // Generate random transaction number
+  let txnID = Math.floor(Math.random() * 900000 + 100000);
+
+  // Hide form and show processing
+  document.getElementById('form').style.display = 'none';
+  let processingDiv = document.getElementById('processing');
+  let progressBar = document.getElementById('progressBar');
+  let successDiv = document.getElementById('success');
+
+  processingDiv.style.display = 'block';
+  progressBar.style.width = '0%';
+  progressBar.innerText = '0%';
+
+  let progress = 0;
+  let interval = setInterval(() => {
+    progress += 10;
+    if (progress > 100) progress = 100;
+    progressBar.style.width = progress + '%';
+    progressBar.innerText = progress + '%';
+    if (progress >= 100) {
+      clearInterval(interval);
+      processingDiv.style.display = 'none';
+      successDiv.style.display = 'block';
+      successDiv.innerHTML = `
+        <strong>Transaction Successful ✅</strong><br><br>
+        Account Holder: ${name}<br>
+        Refund Amount: ${processedAmount}<br>
+        Reason for Refund: ${reason}<br>
+        Transaction No.: TXN${txnID}<br>
+        Status: Approved<br><br>
+        Your refund has successfully sent
+      `;
+    }
+  }, 500);
+}
+</script>
+</body>
+</html>
