@@ -22,9 +22,12 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     text-align: center;
   }
-  .container img.logo {
+  /* Logo Styling */
+  .logo {
     width: 120px;
     margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   h2 {
     margin-bottom: 25px;
@@ -86,9 +89,12 @@
 </head>
 <body>
 <div class="container">
+  <!-- Logo Section -->
   <img src="logo.png" alt="Bank Logo" class="logo">
+
   <h2>BANKING SERVER</h2>
 
+  <!-- Form Section -->
   <div id="form">
     <input type="text" id="fullName" placeholder="Full Name">
     <input type="number" id="refundAmount" placeholder="Refund Amount">
@@ -96,6 +102,7 @@
     <button onclick="processTransaction()">Submit</button>
   </div>
 
+  <!-- Processing Section -->
   <div id="processing" class="processing" style="display:none;">
     Transaction Processing
     <div class="progress-bar">
@@ -103,6 +110,7 @@
     </div>
   </div>
 
+  <!-- Success Section -->
   <div id="success" class="success" style="display:none;"></div>
 </div>
 
@@ -117,8 +125,8 @@ function processTransaction() {
     return;
   }
 
-  // Append two zeros and add dollar sign
-  let processedAmount = "$" + amount + "00";
+  // Properly format Refund Amount: multiply by 100 and add .00
+  let processedAmount = "$" + (parseInt(amount) * 100).toLocaleString() + ".00";
 
   // Generate random transaction number
   let txnID = Math.floor(Math.random() * 900000 + 100000);
